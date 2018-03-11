@@ -1,0 +1,64 @@
+  #Zadana je funkcija f(x)=2x , pronaæi Lagrangeov interpolacijski polinom
+koji interpolira zadanu funkciju s toèkama apcise 0,2,3. Izraèunati L2(1) 
+i apsolutnu pogrešku zaokruženu na 4 decimale.
+
+>>> from __future__ import division  
+>>> from math import*
+>>> from numpy import*	
+>>> import pylab as py	
+
+>>> def l0(x,x0,x1,x2):
+	return ((x-x1)*(x-x2))/ ((x0-x1)*(x0-x2))
+
+>>> def l1(x,x0,x1,x2):
+	return ((x-x0)*(x-x2))/ ((x1-x0)*(x1-x2))
+
+>>> def l2(x,x0,x1,x2):
+	return ((x-x0)*(x-x1))/ ((x2-x0)*(x2-x1))
+
+>>>#definiramo 4 parametra za svaku od 3 baze Lagrangeovog polinoma i vraæamo formulom njihove vrijednosti
+>>> def f(x):
+	return 2**x
+
+>>> #definiramo funkciju na kojoj radimo primjer
+
+>>> def lag(x,x0,x1,x2):
+	return l0(x,x0,x1,x2)*f(x0) + l1(x,x0,x1,x2)*f(x1) + l2(x,x0,x1,x2)*f(x2)
+
+#funkcija koja nam raèuna traženi Lagrangeov polinom gdje sa X zadajemo vrijednost u kojoj raèunamo Lagrangeov polinom a sa (x0,x1,x2) oznaèavamo èvorove interpolacije
+
+>>> pv=lag(1,0,2,3)     # pv=priblizna vrijednost za x=1 i toèke 0,2,3 u ovom sluèaju,a imamo moguænost odrediti x i toèke koje god želimo pozivom u ovoj funkciji
+
+>>> fv=f(1)        #prava funkcijska vrijednost
+>>> greska=abs(fv-pv)        # apsolutna greška koju dobijamo oduzimanjem funkcijske vrijednosti od približne vrjednosti
+>>>print fv,pv,greska        # na kraju ispišemo vrijednosti funkcijske vrijednosti ,približne vrijednosti i apsolutne greške
+
+
+
+  #Zadana je funkcija f(x)=2x , pronaæi Lagrangeov interpolacijski polinom
+koji interpolira zadanu funkciju s toèkama apcise 0,2,3. Izraèunati L2(1) 
+i apsolutnu pogrešku zaokruženu na 4 decimale.
+
+>>> from numpy import*
+>>> from scipy import interpolate as i
+>>> import pylab as py
+
+>>> def f(x):
+	return 2**x
+
+>>> x=array([0,2,3])
+>>> y=f(x)
+>>> lag=i.lagrange(x,y)
+>>> print lag   #ovime ispisujem         0.8333x2 - 0.1667 x + 1
+>>> pv=lag(1)
+>>> fv=f(1)
+>>> greska=abs(fv-pv)
+>>> print fv,pv,greska
+
+>>> x100=linspace(-1,4,100)           # uzimam 100 ekvidistantnih x koordinata izmeðu  -1 do 4
+>>> py.plot(x100,lag(x100),label="lag(x)")
+>>> py.plot(x,y,'o',label="(x,f(x))")
+>>> py.plot(x100,f(x100),label="f(x)")
+# koristimo naredbu plot za crtanje 2 grafa i to prvi je Lagrangeov polinoma drugi je graf zadane funkcije, uz to, crtam i tri èvora interpolacije 
+>>> py.legend(loc="upper left")    #naredba za prikaz legende u ljevom gornjem kutu
+>>> py.show()          #naredba za prikaz grafova
